@@ -2,13 +2,14 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 class UserAccountManager(BaseUserManager):
-    def create_superuser(self, email, name, password=None):
+    def create_superuser(self, email, name,is_student=False,  password=None):
         """
         Creates and saves a superuser with the given email, name and password.
         """
         user = self.create_user(
             email=self.normalize_email(email),
             password=password,
+            is_student=is_student,
             name=name,
         )
         user.is_admin = True
@@ -41,7 +42,7 @@ class userAccount(AbstractBaseUser, PermissionsMixin):
     objects = UserAccountManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'is_student']
+    REQUIRED_FIELDS = ['name','is_student']
 
     def get_full_name(self):
         return self.name
